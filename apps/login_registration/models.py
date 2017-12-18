@@ -33,15 +33,15 @@ class UserManager(models.Manager):
                 User.objects.create(first_name=firstName, last_name=lastName, email=email, password=hash1)
         return errors
 
-    def login_validator(self, postData):
+    def login_validator(self, postData, request):
         errors = {}
         if len(postData['email']) < 1:
             errors['email'] = 'Email is required'
         if len(postData['password']) < 1:
             errors['password'] = 'Password is required'
         if not errors:
-            email = request.POST['email']
-            password = request.POST['password']
+            email = postData['email']
+            password = postData['password']
             try:
                 user = User.objects.get(email=email)
             except:
@@ -49,6 +49,9 @@ class UserManager(models.Manager):
             check = bcrypt.checkpw(password.encode(), user.password.encode())
             if not check: 
                 error['password'] = 'Incorrect email or password'
+            else:
+                request.session['id'] = user.id
+                request.session['name'] = user.first_name + " " + user.last_name
         return errors
 
 class User(models.Model):

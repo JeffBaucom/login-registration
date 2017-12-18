@@ -11,6 +11,13 @@ def index(request):
 def success(request):
     return render(request, 'login_registration/success.html')
 
+def logout(request):
+    if 'id' in request.session:
+        request.session.pop('id')
+    if 'name' in request.session:
+        request.session.pop('name')
+    return redirect('/')
+
 def create(request):
     if request.method != "POST":
         return redirect('/')
@@ -26,7 +33,7 @@ def create(request):
 def login(request):
     if request.method != "POST":
         return redirect('/')
-    errors = User.objects.login_validator(request.POST)
+    errors = User.objects.login_validator(request.POST, request)
     if len(errors):
         for tag, error, in errors.iteritems():
             messages.error(request, error, extra_tags=tag)

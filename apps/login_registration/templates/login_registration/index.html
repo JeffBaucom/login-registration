@@ -51,6 +51,12 @@
                 </div>
             </form>
         </div>
+        <div>
+            {% if 'id' in request.session %}
+                <h2>You are logged in: {{request.session.name}}</h2>
+                <a href="/logout"><button>Log Out</button></a>
+            {% endif %}
+        </div>
         <div class="form-wrapper">
             <form action="/users/login" method="POST">
                 {% csrf_token %}
