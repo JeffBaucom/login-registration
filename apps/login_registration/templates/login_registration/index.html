@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'login_registration/normalize.css' %}">
+    <link rel="stylesheet" href="{% static 'login_registration/skeleton.css' %}">
+    <link rel="stylesheet" href="{% static 'login_registration/main.css' %}">
+</head>
+<body>
+    <div class="container">
+        <div class="row top-bar">
+            <h1>Registration</h1>
+        </div>
+        <div class="form-wrapper">
+            {% if messages %}
+                <ul>
+                    {% for message in messages %}
+                    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+            <form action="/users/create" method="POST">
+                {% csrf_token %}
+                <div class="row">
+                    <div class="six columns">
+                        <label for="">First Name: </label>
+                        <input class="u-full-width" type="text" name="firstName">
+                    </div>
+                    <div class="six columns">
+                        <label for="">Last Name: </label>
+                        <input class="u-full-width" type="text" name="lastName">
+                    </div>
+                </div>
+                <div class="row">
+                    <label for="">Email: </label>
+                    <input type="text" name="email">
+                </div>
+                <div class="row">
+                    <label for="">Password: </label>
+                    <input type="password" name="password">
+                </div>
+                <div class="row">
+                    <label for="">Confirm Password: </label>
+                    <input type="password" name="confirm_password">
+                </div>
+
+                <div class="row">
+                    <input type="submit" value="Register">
+                </div>
+            </form>
+        </div>
+        <div class="form-wrapper">
+            <form action="/users/login" method="POST">
+                {% csrf_token %}
+                <div class="row">
+                    <label for="">Email: </label>
+                    <input type="email" name="email">
+                </div>
+                <div class="row">
+                    <label for="">Password: </label>
+                    <input type="password" name="password">
+                </div>
+                <div class="row">
+                    <input type="submit" value="Login">
+                </div>
+            </form>
+        </div>
+    </div>  
+</body>
+</html>
