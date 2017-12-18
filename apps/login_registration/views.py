@@ -36,7 +36,7 @@ def create(request):
 def login(request):
     if request.method != "POST":
         return redirect('/')
-
+    
     result = User.objects.login_validator(request.POST)
     if isinstance(result, User):
         request.session['id'] = result.id
