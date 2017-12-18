@@ -10,10 +10,7 @@
 </head>
 <body>
     <div class="container">
-        <div class="row top-bar">
-            <h1>Registration</h1>
-        </div>
-        <div class="form-wrapper">
+        <div class="row">
             {% if messages %}
                 <ul>
                     {% for message in messages %}
@@ -21,57 +18,55 @@
                     {% endfor %}
                 </ul>
             {% endif %}
-            <form action="/users/create" method="POST">
+            <form class="six columns" action="/users/create" method="POST">
+                <div class="row">
+                    <h1>Registration</h1>
+                </div>
                 {% csrf_token %}
                 <div class="row">
-                    <div class="six columns">
                         <label for="">First Name: </label>
                         <input class="u-full-width" type="text" name="firstName">
-                    </div>
-                    <div class="six columns">
                         <label for="">Last Name: </label>
                         <input class="u-full-width" type="text" name="lastName">
-                    </div>
                 </div>
                 <div class="row">
-                    <label for="">Email: </label>
-                    <input type="text" name="email">
+                        <label for="">Email: </label>
+                        <input class="u-full-width" type="text" name="email">
                 </div>
                 <div class="row">
-                    <label for="">Password: </label>
-                    <input type="password" name="password">
-                </div>
-                <div class="row">
-                    <label for="">Confirm Password: </label>
-                    <input type="password" name="confirm_password">
+                        <label for="">Password: </label>
+                        <input class="u-full-width" type="password" name="password">
+                        <label for="">Confirm Password: </label>
+                        <input class="u-full-width" type="password" name="confirm_password">
                 </div>
 
                 <div class="row">
                     <input type="submit" value="Register">
                 </div>
             </form>
+            <div class="six columns">
+            <h1>Log In</h1>
+            <form action="/users/login" method="POST">
+                {% csrf_token %}
+                <div class="row">
+                        <label for="">Email: </label>
+                        <input class="u-full-width" type="email" name="email">
+                </div>
+                <div class="row">
+                        <label for="">Password: </label>
+                        <input class="u-full-width" type="password" name="password">
+                </div>
+                <div class="row">
+                    <input type="submit" value="Login">
+                </div>
+            </form>
+        </div>
         </div>
         <div>
             {% if 'id' in request.session %}
                 <h2>You are logged in: {{request.session.name}}</h2>
                 <a href="/logout"><button>Log Out</button></a>
             {% endif %}
-        </div>
-        <div class="form-wrapper">
-            <form action="/users/login" method="POST">
-                {% csrf_token %}
-                <div class="row">
-                    <label for="">Email: </label>
-                    <input type="email" name="email">
-                </div>
-                <div class="row">
-                    <label for="">Password: </label>
-                    <input type="password" name="password">
-                </div>
-                <div class="row">
-                    <input type="submit" value="Login">
-                </div>
-            </form>
         </div>
     </div>  
 </body>

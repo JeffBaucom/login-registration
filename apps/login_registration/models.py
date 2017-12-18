@@ -10,16 +10,20 @@ class UserManager(models.Manager):
         errors = {}
         if len(postData['firstName']) < 2:
             errors['first_name'] = 'First name must be at least 2 characters'
+
         if len(postData['lastName']) < 2:
             errors['last_name'] = 'Last name must be at least 2 characters'
+
         if len(postData['email']) < 1:
             errors['email'] = 'Email is required'
-        if not EMAIL_REGEX.match(postData['email']):
+        elif not EMAIL_REGEX.match(postData['email']):
             errors['email'] = 'Invalid Email'
+
         if len(postData['password']) < 8:
             errors['password'] = 'Password must be at least 8 characters'
-        if postData['password'] != postData['confirm_password']:
+        elif postData['password'] != postData['confirm_password']:
             errors['confirm_password'] = 'Password confirmation must match'
+
         if not errors:
             firstName = postData['firstName']
             lastName = postData['lastName']
@@ -30,10 +34,11 @@ class UserManager(models.Manager):
             except:
                 password = postData['password']
                 hash1 = bcrypt.hashpw(password.encode(), bcrypt.gensalt())
-                User.objects.create(first_name=firstName, last_name=lastName, email=email, password=hash1)
+                # Return User Object
+                return User.objects.create(first_name=firstName, last_name=lastName, email=email, password=hash1)
         return errors
 
-    def login_validator(self, postData, request):
+    def login_validator(self, postData):
         errors = {}
         if len(postData['email']) < 1:
             errors['email'] = 'Email is required'
@@ -50,8 +55,8 @@ class UserManager(models.Manager):
             if not check: 
                 error['password'] = 'Incorrect email or password'
             else:
-                request.session['id'] = user.id
-                request.session['name'] = user.first_name + " " + user.last_name
+                # Return User Object
+                return user
         return errors
 
 class User(models.Model):

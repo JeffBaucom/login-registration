@@ -3,40 +3,46 @@ from django.contrib import messages
 import bcrypt
 from models import *
 
-# Create your views here.
-
+#GET ROUTES
+#--------------------------------------------------------------------
 def index(request):
     return render(request, 'login_registration/index.html')
 
 def success(request):
+    # if 'user_id' ...
     return render(request, 'login_registration/success.html')
 
+#POST ROUTES
+#--------------------------------------------------------------------
 def logout(request):
-    if 'id' in request.session:
-        request.session.pop('id')
-    if 'name' in request.session:
-        request.session.pop('name')
+    request.session.clear()
     return redirect('/')
 
 def create(request):
     if request.method != "POST":
         return redirect('/')
-    errors = User.objects.reg_validator(request.POST)
-    if len(errors):
-        for tag, error, in errors.iteritems():
+
+    result = User.objects.reg_validator(request.POST)
+    if isinstance(result, User):
+        request.session['id'] = result.id
+        request.session['name'] = result.first_name + " " + result.last_name
+        return redirect('/success')
+    else:
+        for tag, error, in result.iteritems():
             messages.error(request, error, extra_tags=tag)
             print messages
         return redirect('/')
-    else:
-        return redirect('/success')
 
 def login(request):
     if request.method != "POST":
         return redirect('/')
-    errors = User.objects.login_validator(request.POST, request)
-    if len(errors):
-        for tag, error, in errors.iteritems():
-            messages.error(request, error, extra_tags=tag)
-        return redirect('/')
-    else:
+
+    result = User.objects.login_validator(request.POST)
+    if isinstance(result, User):
+        request.session['id'] = resut.id
+        request.session['name'] = result.first_name + " " + result.last_name
         return redirect('/success')
+    else:
+        for tag, error, in result.iteritems():
+            messages.error(request, error, extra_tags=tag)
+        return redirect('/')       
