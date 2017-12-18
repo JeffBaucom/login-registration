@@ -39,7 +39,7 @@ def login(request):
 
     result = User.objects.login_validator(request.POST)
     if isinstance(result, User):
-        request.session['id'] = resut.id
+        request.session['id'] = result.id
         request.session['name'] = result.first_name + " " + result.last_name
         return redirect('/success')
     else:
